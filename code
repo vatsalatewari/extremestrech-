@@ -1,0 +1,204 @@
+#Here we will be simulating fibroblasts confined to a square embryo. The cells all start moving in a random direction. They then continue moving in that direction, with small random variations, until they encounter either another cell or the embryo wall.
+
+#The first thing to do do is to set up the number of cells, a variable which defines the size of the cell, and a variable that defines how big the embryo is. Select values for all of these
+
+Ncells = 20
+size=10
+radius=20
+
+#creating cell position and cell velocity
+
+import random
+Ncells = 20
+size=10
+radius=20
+
+xs = []
+ys = []
+vx = []
+vy = []
+for i in range(0,Ncells):
+    xs.append([random.uniform(-size,size)])
+    ys.append([random.uniform(-size,size)])
+    vx.append(random.uniform(-0.1,0.1))
+    vy.append(random.uniform(-0.1,0.1))
+    
+
+#plot cells
+
+import matplotlib.pyplot as plt
+import random
+
+Ncells = 20
+size=10
+radius=20
+
+xs = []
+ys = []
+vx = []
+vy = []
+for i in range(0,Ncells):
+    xs.append([random.uniform(-size,size)])
+    ys.append([random.uniform(-size,size)])
+    vx.append(random.uniform(-0.1,0.1))
+    vy.append(random.uniform(-0.1,0.1))
+
+plt.plot(xs, ys, "o", markersize=20)
+plt.show()
+
+
+#adding locomotion
+
+import matplotlib.pyplot as plt
+import random
+
+Ncells = 20
+size=10
+radius=20
+
+xs = []
+ys = []
+vx = []
+vy = []
+for i in range(0,Ncells):
+    xs.append([random.uniform(-size,size)])
+    ys.append([random.uniform(-size,size)])
+    vx.append(random.uniform(-0.1,0.1))
+    vy.append(random.uniform(-0.1,0.1))
+
+nsteps = 500
+for s in range(0,nsteps):
+    for i in range(0,Ncells):
+        
+        x = xs[i][s]
+        y = ys[i][s]
+        
+        newx = x + vx[i]
+        newy = y + vy[i]
+        
+        xs[i].append(newx)
+        ys[i].append(newy)
+    
+for i in range(0, Ncells):
+    plt.plot(xs[i], ys[i])
+        
+plt.axis("square")        
+plt.xlim(-2*size,2*size)
+plt.ylim(-2*size,2*size)
+#plt.axis("square") Note that if we put axis square here then it undoes the limits what a fun bug!
+plt.show()
+
+#randomise Movement
+
+import matplotlib.pyplot as plt
+import random
+
+Ncells = 20
+size=10
+radius=20
+
+xs = []
+ys = []
+vx = []
+vy = []
+for i in range(0,Ncells):
+    xs.append([random.uniform(-size,size)])
+    ys.append([random.uniform(-size,size)])
+    vx.append(random.uniform(-0.1,0.1))
+    vy.append(random.uniform(-0.1,0.1))
+
+nsteps = 500
+for s in range(0,nsteps):
+    for i in range(0,Ncells):
+        
+        x = xs[i][s]
+        y = ys[i][s]
+        
+        newx = x + vx[i]
+        newy = y + vy[i]
+        
+        xs[i].append(newx)
+        ys[i].append(newy)
+        
+        dx = random.uniform(-0.01,0.01)
+        dy = random.uniform(-0.01,0.01)
+        vx[i] += dx
+        vy[i] += dy
+    
+for i in range(0, Ncells):
+    plt.plot(xs[i], ys[i])
+        
+plt.axis("square")        
+plt.xlim(-2*size,2*size)
+plt.ylim(-2*size,2*size)
+#plt.axis("equal")
+plt.show()
+
+#reverse velocities if cells touch
+
+import matplotlib.pyplot as plt
+import random
+
+Ncells = 20
+size=10
+radius=20
+
+xs = []
+ys = []
+vx = []
+vy = []
+for i in range(0,Ncells):
+    xs.append([random.uniform(-size,size)])
+    ys.append([random.uniform(-size,size)])
+    vx.append(random.uniform(-0.1,0.1))
+    vy.append(random.uniform(-0.1,0.1))
+    
+plt.plot(xs, ys, "o", markersize=20)
+plt.show()
+
+nsteps = 500
+for s in range(0,nsteps):
+    for i in range(0,Ncells):
+        
+        x = xs[i][s]
+        y = ys[i][s]
+        
+        newx = x + vx[i]
+        newy = y + vy[i]
+        
+        too_close=False
+        for j in range(0,Ncells):
+            if i!=j and (x-xs[j][s])**2 + (y-ys[j][s])**2 < 1:
+                too_close=True
+        
+        if newx<-radius or newx>radius:
+            vx[i]=-vx[i]
+            xs[i].append(x)
+            ys[i].append(y)
+        elif newy <-radius or newy > radius:
+            vy[i]=-vy[i]
+            xs[i].append(x)
+            ys[i].append(y)
+        elif too_close:
+            vx[i]=-vx[i]
+            vy[i]=-vy[i]
+            xs[i].append(x+vx[i])
+            ys[i].append(y+vy[i])
+        else:
+            xs[i].append(newx)
+            ys[i].append(newy)
+     
+        dx = random.uniform(-0.01,0.01)
+        dy = random.uniform(-0.01,0.01)
+        vx[i] += dx
+        vy[i] += dy
+    
+for i in range(0, Ncells):
+    plt.plot(xs[i], ys[i])
+        
+        
+plt.xlim(-2*size,2*size)
+plt.ylim(-2*size,2*size)
+plt.axis("square")
+plt.show()
+    
